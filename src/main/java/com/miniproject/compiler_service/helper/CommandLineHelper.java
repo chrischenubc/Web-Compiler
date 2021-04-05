@@ -22,10 +22,7 @@ public class CommandLineHelper {
                 output.append(line + "\n");
             }
             int exitVal = process.waitFor();  //TODO: NON BLOCKING
-            if (exitVal == 0) {
-                System.out.println("Success!");
-            } else {
-                System.out.println("Error!");//abnormal...
+            if (exitVal != 0) {
                 String errMsg = output.toString();
                 throw new CompileFailureException(errMsg);
             }
