@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 @Component
 //TODO Make it to a interface or abstract class!
-public class CommandLineHelper {
+public class CommandLineRunner {
     public static String exec(String[] commands) {
         StringBuilder output = new StringBuilder();
         ProcessBuilder processBuilder = new ProcessBuilder().command(commands).redirectErrorStream(true);
@@ -38,7 +38,7 @@ public class CommandLineHelper {
     public static void main(String[] args) {
         String commad = "javac -verbose /Users/chenchris/Work/compiler_service/temp/Sample.java";
         String[] commands = {"javac", "-verbose", "/Users/chenchris/Work/compiler_service/temp/Sample.java"};
-        String output = CommandLineHelper.exec(commands);
+        String output = CommandLineRunner.exec(commands);
         System.out.println(output);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.core.io.Resource;
 import java.io.IOException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -48,6 +49,18 @@ public class FileUploadController {
 
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   RedirectAttributes redirectAttributes) {
+
+        storageService.store(file);
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully uploaded " + file.getOriginalFilename() + "!");
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/test")
+    public String test(@RequestParam Map<String,String> options,
+                            @RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);

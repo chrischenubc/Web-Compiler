@@ -1,6 +1,6 @@
 package com.miniproject.compiler_service.compile;
 
-import com.miniproject.compiler_service.helper.CommandLineHelper;
+import com.miniproject.compiler_service.helper.CommandLineRunner;
 import com.miniproject.compiler_service.storage.StorageService;
 import org.apache.commons.io.FilenameUtils;
 
@@ -28,16 +28,19 @@ public class JavaCompileService implements CompileService{
 
     @Autowired
     StorageService storageService;
+    JavaCompilerCmdBuilder javaCompiler;
 
     @Override
-    public Resource exec(Path path, Map<String,String> parameters) {
-        String[] command = buildCommand(path, parameters);
-        logger.info("Java Compiler Executing: {}", toCommandString(command));
-        String stdout = CommandLineHelper.exec(command);
+    public Resource exec(String version, Path path, Map<String,String> parameters) {
+        if (version == null) {
+            version = DEFAULT_JAVA_COMPILER_VERSION;
+        }
+        CompilerCmdBuilder javaCmdBuilder = new JavaCompilerCmdBuilder(version, path.toString(), parameters);
+        logger.info("Java Compiler Executing: {}", javaCmdBuilder.toString());
+        String stdout = CommandLineRunner.exec(javaCmdBuilder.build());
         Resource resource = storageService.loadAsResource(
                 FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
-        logger.info("{} was compiled in Java{} and is compatiable with JVM {}", resource.getFilename(),
-                sourceVersion, targetVersion);
+        logger.info("{} was compiled in Java {}", resource.getFilename(), javaCmdBuilder.getCompileVersion());
         return resource;
     }
 

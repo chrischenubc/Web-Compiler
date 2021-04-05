@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,12 +40,35 @@ public class RemoteCompileController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/compiler/java/{filename:.+}")
-    public ResponseEntity compileJava(@PathVariable String filename,
-                                      @RequestParam Map<String,String> parameters) {
+    @GetMapping("/compiler/java/{version}/{filename:.+}")
+    public ResponseEntity compileJava(@PathVariable(required = false) String version, @PathVariable String filename,
+                                      @RequestParam Map<String,String> options
+                                      ) {
         try {
             Path path = storageService.load(filename);
-            Resource compiledFile = compileService.exec(path, parameters);
+            Resource compiledFile = compileService.exec(version, path, options);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
+                    .body(compiledFile);
+        } catch (CompileFailureException e) {
+            logger.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (StorageFileNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body("Requested File Not Found");
+        }
+    }
+
+    @PostMapping("/compiler/java/{version}")
+    public ResponseEntity remoteCompileWithFile(@PathVariable(required = false) String version,
+                                                @RequestParam   Map<String,String> options,
+                                                @RequestParam("file") MultipartFile file
+                                                ) {
+        try {
+            storageService.store(file);
+            Path path = storageService.load(file.getOriginalFilename());
+            Resource compiledFile = compileService.exec(version, path, options);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
