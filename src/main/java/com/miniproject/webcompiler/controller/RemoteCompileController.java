@@ -1,7 +1,7 @@
-package com.miniproject.compiler_service.controller;
+package com.miniproject.webcompiler.controller;
 
-import com.miniproject.compiler_service.compile.CompileService;
-import com.miniproject.compiler_service.compile.CompileServiceFactory;
+import com.miniproject.webcompiler.compile.CompileService;
+import com.miniproject.webcompiler.compile.CompileServiceFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.miniproject.compiler_service.compile;
+package com.miniproject.webcompiler.compile;
 
 import java.util.List;
 import java.util.Map;

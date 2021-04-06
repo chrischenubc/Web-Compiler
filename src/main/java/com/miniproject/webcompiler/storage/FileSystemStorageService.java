@@ -1,4 +1,4 @@
-package com.miniproject.compiler_service.storage;
+package com.miniproject.webcompiler.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
-import com.miniproject.compiler_service.CompilerServiceApplication;
+import com.miniproject.webcompiler.WebCompilerApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
-    private static final Logger logger = LoggerFactory.getLogger(CompilerServiceApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebCompilerApplication.class);
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {

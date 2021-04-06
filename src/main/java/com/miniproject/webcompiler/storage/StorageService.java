@@ -1,4 +1,4 @@
-package com.miniproject.compiler_service.storage;
+package com.miniproject.webcompiler.storage;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

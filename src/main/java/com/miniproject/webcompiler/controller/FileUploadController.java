@@ -1,7 +1,7 @@
-package com.miniproject.compiler_service.controller;
+package com.miniproject.webcompiler.controller;
 
-import com.miniproject.compiler_service.storage.StorageFileNotFoundException;
-import com.miniproject.compiler_service.storage.StorageService;
+import com.miniproject.webcompiler.storage.StorageFileNotFoundException;
+import com.miniproject.webcompiler.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

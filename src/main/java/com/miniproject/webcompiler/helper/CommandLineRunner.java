@@ -1,6 +1,6 @@
-package com.miniproject.compiler_service.helper;
+package com.miniproject.webcompiler.helper;
 
-import com.miniproject.compiler_service.compile.CompileFailureException;
+import com.miniproject.webcompiler.compile.CompileFailureException;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;

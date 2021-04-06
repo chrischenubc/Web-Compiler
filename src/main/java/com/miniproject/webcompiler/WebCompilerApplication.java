@@ -1,7 +1,7 @@
-package com.miniproject.compiler_service;
+package com.miniproject.webcompiler;
 
-import com.miniproject.compiler_service.storage.StorageProperties;
-import com.miniproject.compiler_service.storage.StorageService;
+import com.miniproject.webcompiler.storage.StorageProperties;
+import com.miniproject.webcompiler.storage.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
-public class CompilerServiceApplication {
+public class WebCompilerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CompilerServiceApplication.class, args);
+        SpringApplication.run(WebCompilerApplication.class, args);
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.miniproject.compiler_service.storage;
+package com.miniproject.webcompiler.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

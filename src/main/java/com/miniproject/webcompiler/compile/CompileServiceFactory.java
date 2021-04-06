@@ -1,4 +1,4 @@
-package com.miniproject.compiler_service.compile;
+package com.miniproject.webcompiler.compile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
