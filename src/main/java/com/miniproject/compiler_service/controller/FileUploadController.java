@@ -1,4 +1,4 @@
-package com.miniproject.compiler_service;
+package com.miniproject.compiler_service.controller;
 
 import com.miniproject.compiler_service.storage.StorageFileNotFoundException;
 import com.miniproject.compiler_service.storage.StorageService;
