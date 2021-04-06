@@ -2,6 +2,7 @@ package com.miniproject.compiler_service;
 
 import com.miniproject.compiler_service.compile.CompileFailureException;
 import com.miniproject.compiler_service.compile.CompileService;
+import com.miniproject.compiler_service.compile.CompileServiceFactory;
 import com.miniproject.compiler_service.storage.FileSystemStorageService;
 import com.miniproject.compiler_service.storage.StorageFileNotFoundException;
 import com.miniproject.compiler_service.storage.StorageProperties;
@@ -29,71 +30,27 @@ import java.util.Map;
 
 @RestController
 public class RemoteCompileController {
-    private final CompileService compileService;
-    private final StorageService storageService;
+    @Autowired
+    private CompileServiceFactory compileServiceFactory;
 
     private static final Logger logger = LoggerFactory.getLogger(RemoteCompileController.class);
 
-    @Autowired
-    public RemoteCompileController(CompileService compileService, StorageService storageService) {
-        this.compileService = compileService;
-        this.storageService = storageService;
-    }
-
-    @GetMapping("/compiler/java/{version}/{filename:.+}")
-    public ResponseEntity compileJava(@PathVariable(required = false) String version, @PathVariable String filename,
-                                      @RequestParam Map<String,String> options
-                                      ) {
-        try {
-            Path path = storageService.load(filename);
-            Resource compiledFile = compileService.exec(version, path, options);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
-                    .body(compiledFile);
-        } catch (CompileFailureException e) {
-            logger.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (StorageFileNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().body("Requested File Not Found");
-        }
-    }
-
-    @PostMapping("/compiler/java/{version}")
-    public ResponseEntity remoteCompileWithFile(@PathVariable(required = false) String version,
-                                                @RequestParam   Map<String,String> options,
+    @PostMapping(value = {"/compiler/{language}", "/compiler/{language}/{version}"})
+    public ResponseEntity remoteCompileWithFile(@PathVariable String language,
+                                                @PathVariable(required = false) String version,
+                                                @RequestParam Map<String,String> options,
                                                 @RequestParam("file") MultipartFile file
                                                 ) {
         try {
-            storageService.store(file);
-            Path path = storageService.load(file.getOriginalFilename());
-            Resource compiledFile = compileService.exec(version, path, options);
+            CompileService compileService = compileServiceFactory.getService(language);
+            Resource compiledFile = compileService.exec(version, file, options);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
                     .body(compiledFile);
-        } catch (CompileFailureException e) {
+        } catch (RuntimeException e) {
             logger.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (StorageFileNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().body("Requested File Not Found");
         }
-    }
-
-    @GetMapping("/download/{filename:.+}")
-    public ResponseEntity downloadFileFromLocal(@PathVariable String filename) {
-        Resource resource = storageService.loadAsResource(filename);
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
-
-
-    @PostMapping("/compiler/go")
-    public String goCompiler(@RequestHeader HttpHeaders headers) {
-        return "hello world";
     }
 }

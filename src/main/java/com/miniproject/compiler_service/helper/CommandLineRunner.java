@@ -6,13 +6,14 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 @Component
 //TODO Make it to a interface or abstract class!
 public class CommandLineRunner {
-    public static String exec(String[] commands) {
+    public static String exec(List<String> command) {
         StringBuilder output = new StringBuilder();
-        ProcessBuilder processBuilder = new ProcessBuilder().command(commands).redirectErrorStream(true);
+        ProcessBuilder processBuilder = new ProcessBuilder().command(command).redirectErrorStream(true);
         try {
             Process process = processBuilder.start();
 
@@ -37,8 +38,8 @@ public class CommandLineRunner {
 
     public static void main(String[] args) {
         String commad = "javac -verbose /Users/chenchris/Work/compiler_service/temp/Sample.java";
-        String[] commands = {"javac", "-verbose", "/Users/chenchris/Work/compiler_service/temp/Sample.java"};
-        String output = CommandLineRunner.exec(commands);
-        System.out.println(output);
+        //String[] commands = {"javac", "-verbose", "/Users/chenchris/Work/compiler_service/temp/Sample.java"};
+        //String output = CommandLineRunner.exec(commands);
+        //System.out.println(output);
     }
 }

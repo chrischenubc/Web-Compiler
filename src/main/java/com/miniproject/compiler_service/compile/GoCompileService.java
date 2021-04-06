@@ -16,27 +16,26 @@ import java.nio.file.Path;
 import java.util.Map;
 
 @Service
-public class JavaCompileService implements CompileService{
-    private static final String DOT_CLASS_FILE_EXTENSION = ".class";
-    private static final String DEFAULT_JAVA_COMPILER_VERSION = "11";
-    private static final Logger logger = LoggerFactory.getLogger(JavaCompileService.class);
+public class GoCompileService implements CompileService{
+    private static final Logger logger = LoggerFactory.getLogger(GoCompileService.class);
+    private static final String DEFAULT_GO_COMPILER_VERSION = "1.12";
 
     @Autowired
     StorageService storageService;
 
     @Override
     public Resource exec(String version, MultipartFile file, Map<String,String> parameters) {
-        version = version == null ? DEFAULT_JAVA_COMPILER_VERSION : version;
+        version = version == null ? DEFAULT_GO_COMPILER_VERSION : version;
         storageService.store(file);
         Path path = storageService.load(file.getOriginalFilename());
-        CompilerCmdBuilder javaCmdBuilder = new JavaCompilerCmdBuilder(version, path.toString(), parameters);
+        CompilerCmdBuilder goCmdBuilder = new GoCompilerCmdBuilder(version, path.toString(), parameters);
 
-        logger.info("Java Compiler Executing: {}", javaCmdBuilder.toString());
-        CommandLineRunner.exec(javaCmdBuilder.build());
+        logger.info("Executing: {}", goCmdBuilder.toString());
+        CommandLineRunner.exec(goCmdBuilder.build());
 
         Resource resource = storageService.loadAsResource(
-                FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
-        logger.info("{} was compiled in Java {}", resource.getFilename(), javaCmdBuilder.getCompileVersion());
+                FilenameUtils.removeExtension(path.toAbsolutePath().toString()));
+        logger.info("{} was compiled in Go {}", resource.getFilename(), goCmdBuilder.getCompileVersion());
         return resource;
     }
 }
