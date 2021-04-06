@@ -26,7 +26,7 @@ public class RemoteCompileController {
     public ResponseEntity remoteCompileWithFile(@PathVariable String language,
                                                 @PathVariable(required = false) String version,
                                                 @RequestParam Map<String,String> options,
-                                                @RequestParam("file") MultipartFile file
+                                                @RequestPart("file") MultipartFile file
                                                 ) {
         try {
             CompileService compileService = compileServiceFactory.getService(language);

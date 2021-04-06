@@ -27,15 +27,15 @@ public class GoCompileService implements CompileService{
     public Resource exec(String version, MultipartFile file, Map<String,String> parameters) {
         version = version == null ? DEFAULT_GO_COMPILER_VERSION : version;
         storageService.store(file);
-        Path path = storageService.load(file.getOriginalFilename());
+        Path path = storageService.load(file.getOriginalFilename());;
         CompilerCmdBuilder goCmdBuilder = new GoCompilerCmdBuilder(version, path.toString(), parameters);
 
         logger.info("Executing: {}", goCmdBuilder.toString());
-        CommandLineRunner.exec(goCmdBuilder.build());
+        System.out.println(CommandLineRunner.exec(goCmdBuilder.build()));
 
         Resource resource = storageService.loadAsResource(
                 FilenameUtils.removeExtension(path.toAbsolutePath().toString()));
-        logger.info("{} was compiled in Go {}", resource.getFilename(), goCmdBuilder.getCompileVersion());
+        logger.info("{} was compiled in Go {}", path.getFileName(), goCmdBuilder.getCompileVersion());
         return resource;
     }
 }

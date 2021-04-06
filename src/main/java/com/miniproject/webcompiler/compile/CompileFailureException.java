@@ -6,4 +6,8 @@ public class CompileFailureException extends RuntimeException {
         super(message);
     }
 
+    public CompileFailureException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }
