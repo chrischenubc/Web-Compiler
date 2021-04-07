@@ -23,6 +23,9 @@ public class GoCompileService implements CompileService{
     @Autowired
     StorageService storageService;
 
+    @Autowired
+    CommandLineRunner commandLineRunner;
+
     @Override
     public Resource exec(String version, MultipartFile file, Map<String,String> parameters) {
         version = version == null ? DEFAULT_GO_COMPILER_VERSION : version;
@@ -31,11 +34,22 @@ public class GoCompileService implements CompileService{
         CompilerCmdBuilder goCmdBuilder = new GoCompilerCmdBuilder(version, path.toString(), parameters);
 
         logger.info("Executing: {}", goCmdBuilder.toString());
-        System.out.println(CommandLineRunner.exec(goCmdBuilder.build()));
+        System.out.println(commandLineRunner.exec(goCmdBuilder.build()));
 
         Resource resource = storageService.loadAsResource(
                 FilenameUtils.removeExtension(path.toAbsolutePath().toString()));
         logger.info("{} was compiled in Go {}", path.getFileName(), goCmdBuilder.getCompileVersion());
+        return resource;
+    }
+
+    @Override
+    public Resource execWithCommand(String command, MultipartFile file) {
+        storageService.store(file);
+        Path path = storageService.load(file.getOriginalFilename());
+        commandLineRunner.exec("bash", "-c", command);
+        Resource resource = storageService.loadAsResource(
+                FilenameUtils.removeExtension(path.toAbsolutePath().toString()));
+        logger.info("{} was compiled in Go", path.getFileName());
         return resource;
     }
 }

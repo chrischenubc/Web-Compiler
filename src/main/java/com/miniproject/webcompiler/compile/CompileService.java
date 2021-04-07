@@ -6,4 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface CompileService {
     Resource exec(String version, MultipartFile file, Map<String, String> parameters);
+    Resource execWithCommand(String command, MultipartFile file);
 }

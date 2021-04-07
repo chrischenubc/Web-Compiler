@@ -24,6 +24,9 @@ public class JavaCompileService implements CompileService{
     @Autowired
     StorageService storageService;
 
+    @Autowired
+    CommandLineRunner commandLineRunner;
+
     @Override
     public Resource exec(String version, MultipartFile file, Map<String,String> parameters) {
         version = version == null ? DEFAULT_JAVA_COMPILER_VERSION : version;
@@ -32,11 +35,22 @@ public class JavaCompileService implements CompileService{
         CompilerCmdBuilder javaCmdBuilder = new JavaCompilerCmdBuilder(version, path.toString(), parameters);
 
         logger.info("Java Compiler Executing: {}", javaCmdBuilder.toString());
-        CommandLineRunner.exec(javaCmdBuilder.build());
+        commandLineRunner.exec(javaCmdBuilder.build());
 
         Resource resource = storageService.loadAsResource(
                 FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
         logger.info("{} was compiled in Java {}", resource.getFilename(), javaCmdBuilder.getCompileVersion());
+        return resource;
+    }
+
+    @Override
+    public Resource execWithCommand(String command, MultipartFile file) {
+        storageService.store(file);
+        Path path = storageService.load(file.getOriginalFilename());
+        commandLineRunner.exec("bash", "-c", command);
+        Resource resource = storageService.loadAsResource(
+                FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
+        logger.info("{} was compiled in Java", path.getFileName());
         return resource;
     }
 }
