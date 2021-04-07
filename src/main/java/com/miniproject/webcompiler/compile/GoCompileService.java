@@ -27,11 +27,11 @@ public class GoCompileService implements CompileService{
     CommandLineRunner commandLineRunner;
 
     @Override
-    public Resource exec(String version, MultipartFile file, Map<String,String> parameters) {
+    public Resource exec(String version, MultipartFile file, Map<String,String> flags) {
         version = version == null ? DEFAULT_GO_COMPILER_VERSION : version;
         storageService.store(file);
         Path path = storageService.load(file.getOriginalFilename());;
-        CompilerCmdBuilder goCmdBuilder = new GoCompilerCmdBuilder(version, path.toString(), parameters);
+        CompilerCmdBuilder goCmdBuilder = new GoCompilerCmdBuilder(version, path.toString(), flags);
 
         logger.info("Executing: {}", goCmdBuilder.toString());
         System.out.println(commandLineRunner.exec(goCmdBuilder.build()));
@@ -50,6 +50,24 @@ public class GoCompileService implements CompileService{
         Resource resource = storageService.loadAsResource(
                 FilenameUtils.removeExtension(path.toAbsolutePath().toString()));
         logger.info("{} was compiled in Go", path.getFileName());
+        return resource;
+    }
+
+    @Override
+    public Resource execWithVersionAndFlags(String version, String flags, MultipartFile file) {
+        version = version == null ? DEFAULT_GO_COMPILER_VERSION : version;
+        flags = flags == null ? "" : flags;
+        String sourceFile = file.getOriginalFilename();
+        storageService.store(file);
+        Path path = storageService.load(file.getOriginalFilename());
+        String command = String.format("go tool compile -lang=go%s %s %s && go tool link -o %s %s.o"
+                ,version, flags, file.getOriginalFilename(), FilenameUtils.removeExtension(sourceFile),
+                FilenameUtils.removeExtension(sourceFile));
+        logger.info("Executing: {}", command);
+        commandLineRunner.exec("bash", "-c", command);
+        Resource resource = storageService.loadAsResource(
+                FilenameUtils.removeExtension(path.toAbsolutePath().toString()));
+        logger.info("{} was compiled in Go {}", path.getFileName(), version);
         return resource;
     }
 }

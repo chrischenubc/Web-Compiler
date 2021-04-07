@@ -28,11 +28,11 @@ public class JavaCompileService implements CompileService{
     CommandLineRunner commandLineRunner;
 
     @Override
-    public Resource exec(String version, MultipartFile file, Map<String,String> parameters) {
+    public Resource exec(String version, MultipartFile file, Map<String,String> flags) {
         version = version == null ? DEFAULT_JAVA_COMPILER_VERSION : version;
         storageService.store(file);
         Path path = storageService.load(file.getOriginalFilename());
-        CompilerCmdBuilder javaCmdBuilder = new JavaCompilerCmdBuilder(version, path.toString(), parameters);
+        CompilerCmdBuilder javaCmdBuilder = new JavaCompilerCmdBuilder(version, path.toString(), flags);
 
         logger.info("Java Compiler Executing: {}", javaCmdBuilder.toString());
         commandLineRunner.exec(javaCmdBuilder.build());
@@ -51,6 +51,21 @@ public class JavaCompileService implements CompileService{
         Resource resource = storageService.loadAsResource(
                 FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
         logger.info("{} was compiled in Java", path.getFileName());
+        return resource;
+    }
+
+    @Override
+    public Resource execWithVersionAndFlags(String version, String flags, MultipartFile file) {
+        version = version == null ? DEFAULT_JAVA_COMPILER_VERSION : version;
+        flags = flags == null ? "" : flags;
+        storageService.store(file);
+        Path path = storageService.load(file.getOriginalFilename());
+        String command = String.format("javac --release %s %s %s", version, flags, file.getOriginalFilename());
+        logger.info("Executing: {}", command);
+        commandLineRunner.exec("bash", "-c", command);
+        Resource resource = storageService.loadAsResource(
+                FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
+        logger.info("{} was compiled in Java {}", path.getFileName(), version);
         return resource;
     }
 }

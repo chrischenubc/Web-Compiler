@@ -58,4 +58,23 @@ public class RemoteCompileController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping(value = {"/compiler"})
+    public ResponseEntity remoteCompileWithVersion(@RequestParam String language,
+                                                @RequestParam(value = "version", required = true) String version,
+                                                   @RequestPart(value = "flags", required = false) String flags,
+                                                @RequestPart("file") MultipartFile file
+    ) {
+        try {
+            CompileService compileService = compileServiceFactory.getService(language);
+            Resource compiledFile = compileService.execWithVersionAndFlags(version, flags, file);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
+                    .body(compiledFile);
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
