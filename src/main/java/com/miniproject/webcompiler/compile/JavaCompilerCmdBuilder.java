@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class JavaCompilerCmdBuilder extends CompilerCmdBuilder {
     //Usage: javac <options> <source files>
-    private static final String DEFAULT_JAVA_COMPILER_VERSION = "11";
     private static final String JAVA_COMPILE_TOOL = "javac";
     private static final String RELEASE_OPTION = "--release";
     private static final String SOURCE_OPTION = "--source";
