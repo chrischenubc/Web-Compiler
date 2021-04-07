@@ -13,34 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-
 @RestController
 public class RemoteCompileController {
     @Autowired
     private CompileServiceFactory compileServiceFactory;
 
     private static final Logger logger = LoggerFactory.getLogger(RemoteCompileController.class);
-
-    @PostMapping(value = {"/compiler/{language}", "/compiler/{language}/{version}"})
-    public ResponseEntity remoteCompileWithFile(@PathVariable String language,
-                                                @PathVariable(required = false) String version,
-                                                @RequestParam Map<String,String> options,
-                                                @RequestPart("file") MultipartFile file
-                                                ) {
-        try {
-            CompileService compileService = compileServiceFactory.getService(language);
-            Resource compiledFile = compileService.exec(version, file, options);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
-                    .body(compiledFile);
-        } catch (RuntimeException e) {
-            logger.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
 
     @PostMapping(value = {"/command"})
     public ResponseEntity compileCommand(@RequestParam String language,

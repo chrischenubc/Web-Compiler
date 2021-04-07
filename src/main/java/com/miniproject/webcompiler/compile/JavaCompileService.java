@@ -28,22 +28,6 @@ public class JavaCompileService implements CompileService{
     CommandLineRunner commandLineRunner;
 
     @Override
-    public Resource exec(String version, MultipartFile file, Map<String,String> flags) {
-        version = version == null ? DEFAULT_JAVA_COMPILER_VERSION : version;
-        storageService.store(file);
-        Path path = storageService.load(file.getOriginalFilename());
-        CompilerCmdBuilder javaCmdBuilder = new JavaCompilerCmdBuilder(version, path.toString(), flags);
-
-        logger.info("Java Compiler Executing: {}", javaCmdBuilder.toString());
-        commandLineRunner.exec(javaCmdBuilder.build());
-
-        Resource resource = storageService.loadAsResource(
-                FilenameUtils.removeExtension(path.toAbsolutePath().toString()) + DOT_CLASS_FILE_EXTENSION);
-        logger.info("{} was compiled in Java {}", resource.getFilename(), javaCmdBuilder.getCompileVersion());
-        return resource;
-    }
-
-    @Override
     public Resource execWithCommand(String command, MultipartFile file) {
         storageService.store(file);
         Path path = storageService.load(file.getOriginalFilename());
