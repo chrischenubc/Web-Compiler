@@ -1,5 +1,7 @@
 package com.miniproject.webcompiler.compile;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +20,16 @@ public class JavaCompilerCmdBuilder extends CompilerCmdBuilder {
     @Override
     public List<String> build() {
         List<String> command = new ArrayList<>();
-        command.add(JAVA_COMPILE_TOOL);
-        command.add(SOURCE_OPTION);
-        command.add(compileVersion);
-        command.addAll(getOptionsCmd());
-        command.add(sourceFile);
+        command.add("bash");
+        command.add("-c");
+        command.add(commandStr());
         return command;
+    }
+
+    private String commandStr() {
+        return String.format("%s --release %s %s",
+                JAVA_COMPILE_TOOL, compileVersion,
+                sourceFile);
     }
 
     private List<String> getOptionsCmd() {
