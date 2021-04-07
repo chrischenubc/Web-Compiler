@@ -1,4 +1,4 @@
-package com.miniproject.webcompiler.helper;
+package com.miniproject.webcompiler;
 
 import com.miniproject.webcompiler.compile.CompileFailureException;
 import com.miniproject.webcompiler.storage.StorageProperties;
@@ -52,27 +52,5 @@ public class CommandLineRunner {
             cmdList.add(word);
         }
         return exec(cmdList);
-    }
-
-    public static void main(String[] args) {
-        CommandLineRunner.runCommand();
-    }
-
-    public static void runCommand() {
-        String line = "go tool compile /Users/chenchris/compiler_test/go_test/main.go && ls";
-        String line2 = "go tool link -o main main.o";
-        CommandLine cmdLine = CommandLine.parse(line);
-        CommandLine cmdLine2 = CommandLine.parse(line2);
-        DefaultExecutor executor = new DefaultExecutor();
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream);
-            executor.setStreamHandler(streamHandler);
-            int exitValue = executor.execute(cmdLine);
-            //executor.execute(cmdLine2);
-            System.out.println(outputStream.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

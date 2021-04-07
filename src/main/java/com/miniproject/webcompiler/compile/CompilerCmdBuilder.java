@@ -65,31 +65,3 @@ public abstract class CompilerCmdBuilder {
         this.options = options;
     }
 }
-
-    //    protected void writeBytesToFile(String fileName, byte[] fileData) {
-//        try {
-//            File file = new File(fileName);
-//            FileOutputStream outputStream= new FileOutputStream(file);
-//            outputStream.write(fileData);
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    protected byte[] readFileToBytes(String fileName) {
-//        try {
-//            File file = new File(fileName);
-//            return Files.readAllBytes(file.toPath());
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-

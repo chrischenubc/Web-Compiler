@@ -1,6 +1,6 @@
 package com.miniproject.webcompiler.compile;
 
-import com.miniproject.webcompiler.helper.CommandLineRunner;
+import com.miniproject.webcompiler.CommandLineRunner;
 import com.miniproject.webcompiler.storage.StorageService;
 import org.apache.commons.io.FilenameUtils;
 
