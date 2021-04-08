@@ -78,3 +78,7 @@ What about the code you submit to the server?
 Where is the log?
     
     var/log/application.log
+    
+How to run tests?
+    
+    ./mvnw clean test
