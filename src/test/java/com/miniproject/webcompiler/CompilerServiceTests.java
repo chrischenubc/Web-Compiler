@@ -1,17 +1,11 @@
 package com.miniproject.webcompiler;
 
-import com.miniproject.webcompiler.storage.StorageProperties;
-import com.miniproject.webcompiler.storage.StorageService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
@@ -20,17 +14,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class CompilerServiceTests {
+public class CompilerServiceTests {
 
     @Autowired
     private MockMvc mvc;
