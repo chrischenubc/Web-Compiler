@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-//TODO Make it to a interface or abstract class!
 public class CommandLineRunner {
     @Autowired
     StorageProperties storageProperties;
@@ -25,7 +24,6 @@ public class CommandLineRunner {
                                         .directory(new File(storageProperties.getLocation()))
                                         .command(command)
                                         .redirectErrorStream(true);
-        //processBuilder = new ProcessBuilder().command("go tool compile", "/Users/chenchris/compiler_test/go_test/main.go").redirectErrorStream(true);
         try {
             Process process = processBuilder.start();
 
@@ -34,7 +32,7 @@ public class CommandLineRunner {
             while ((line = reader.readLine()) != null) {
                 output.append(line + "\n");
             }
-            int exitVal = process.waitFor();  //TODO: NON BLOCKING
+            int exitVal = process.waitFor();
             if (exitVal != 0) {
                 String errMsg = output.toString();
                 throw new CompileFailureException(errMsg);
