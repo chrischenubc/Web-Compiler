@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
-    private static final Logger logger = LoggerFactory.getLogger(WebCompilerApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileSystemStorageService.class);
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -101,7 +101,6 @@ public class FileSystemStorageService implements StorageService {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-            //System.out.println(rootLocation.toAbsolutePath().toString());
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);

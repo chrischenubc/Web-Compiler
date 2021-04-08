@@ -14,9 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.core.io.Resource;
 import java.io.IOException;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * The Rest controller that is used to deal with file upload
+ */
 @Controller
 public class FileUploadController {
 
@@ -27,6 +29,9 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
+    /**
+     * List all uploaded files and rendered on the index page
+     */
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
@@ -38,6 +43,9 @@ public class FileUploadController {
         return "uploadForm";
     }
 
+    /**
+     * Download the given file
+     */
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
@@ -47,20 +55,12 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    /**
+     * Upload a file
+     * @param file included in the HTTP body as multipart/form-data
+     */
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
-
-        return "redirect:/";
-    }
-
-    @PostMapping("/test")
-    public String test(@RequestParam Map<String,String> options,
-                            @RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
@@ -74,5 +74,4 @@ public class FileUploadController {
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
     }
-
 }

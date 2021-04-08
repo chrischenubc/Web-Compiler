@@ -16,6 +16,10 @@ public class WebCompilerApplication {
         SpringApplication.run(WebCompilerApplication.class, args);
     }
 
+    /**
+     * Initialize and empty the temporary storage folder.
+     *         Execute only once after the application starts.
+     */
     @Bean
     CommandLineRunner init(StorageService storageService) {
         return (args) -> {

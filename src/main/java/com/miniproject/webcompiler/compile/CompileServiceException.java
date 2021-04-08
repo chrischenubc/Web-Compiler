@@ -1,6 +1,7 @@
 package com.miniproject.webcompiler.compile;
 
 public class CompileServiceException extends RuntimeException {
+
     public CompileServiceException(String message) {
         super(message);
     }

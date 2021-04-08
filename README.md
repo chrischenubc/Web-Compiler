@@ -69,3 +69,7 @@ What is the framework used in the project?
 What about the code you submit to the server?
 
     The code is stored in a temporary folder and will be removed once the server restarts.
+    
+Where is the log?
+    
+    `var/log/application.log`

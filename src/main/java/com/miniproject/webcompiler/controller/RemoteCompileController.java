@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * The REST controller to handle the incoming compile service requests
+ */
 @RestController
 public class RemoteCompileController {
     @Autowired
@@ -20,13 +23,22 @@ public class RemoteCompileController {
 
     private static final Logger logger = LoggerFactory.getLogger(RemoteCompileController.class);
 
+    /**
+     * Handle compile service with used-defined commands
+     * @param language defines the programming language to be used
+     * @param command sets the users-defined compile command
+     * @param file represents the source code to be compiled
+     * @return HTTPStatus.ok if the compile is successful,
+     *          and responds with the output file or executable in the response body
+     */
     @PostMapping(value = {"/command"})
     public ResponseEntity compileCommand(@RequestParam String language,
-                                         @RequestPart("file") MultipartFile file,
-                                         @RequestPart("command") String command) {
+                                         @RequestPart("command") String command,
+                                         @RequestPart("file") MultipartFile file
+                                         ) {
         try {
-            CompileService compileService = compileServiceFactory.getService(language);
-            Resource compiledFile = compileService.execWithCommand(command, file);
+            CompileService compileService = compileServiceFactory.getCompileService(language);
+            Resource compiledFile = compileService.compileWithCommand(command, file);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
@@ -37,15 +49,25 @@ public class RemoteCompileController {
         }
     }
 
+    /**
+     * Handle compile service with the pre-programmed compile command
+     * User only needs to provide language versions (optional) and flags (optional)
+     * @param language defines the programming language to be used
+     * @param version sets the compile language version; null if it not provided by the user
+     * @param flags sets options/flags for the compiler; null if it not provided by the user
+     * @param file represents the source code to be compiled
+     * @return HTTPStatus.ok if the compile is successful,
+     *           and responds with the output file or executable in the response body
+     */
     @PostMapping(value = {"/compiler"})
     public ResponseEntity remoteCompileWithVersion(@RequestParam String language,
-                                                @RequestParam(value = "version", required = true) String version,
-                                                   @RequestPart(value = "flags", required = false) String flags,
-                                                @RequestPart("file") MultipartFile file
+                                                   @RequestParam(value = "version") String version,
+                                                   @RequestPart(value = "flags") String flags,
+                                                   @RequestPart("file") MultipartFile file
     ) {
         try {
-            CompileService compileService = compileServiceFactory.getService(language);
-            Resource compiledFile = compileService.execWithVersionAndFlags(version, flags, file);
+            CompileService compileService = compileServiceFactory.getCompileService(language);
+            Resource compiledFile = compileService.compileWithVersionAndFlags(version, flags, file);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")

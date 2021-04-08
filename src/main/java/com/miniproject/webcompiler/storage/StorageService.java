@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+/**
+ * Storage service creates and manages a temporary folder to store files
+ */
 public interface StorageService {
 
     void init();
