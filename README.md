@@ -13,11 +13,15 @@ on the server side.
 ## How To Use
 
 ```bash
+#build the project
+./mvnw clean package
+
 # Start the application
 docker-compose up
 ```
 
 After starting the application, visit [localhost:8080](localhost:8080)
+
 ![index.html](img/index.png)
 
 After uploading the code and enter the proper values, the server will compile your code.
