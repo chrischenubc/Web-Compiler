@@ -35,24 +35,13 @@ class CompilerServiceTests {
     @Autowired
     private MockMvc mvc;
 
-    private Path location;
-    private String javaSourceFileName;
-    private String javaOutputFileName;
-    private String goSourceFileName;
-    private String goOutputFileName;
-    private File javaSourceFile;
-    private File goSourceFile;
-
-    @BeforeEach
-    public void init() {
-        location = Paths.get("testFiles");
-        javaSourceFileName = "Sample.java";
-        javaOutputFileName = String.format("%s.class", FilenameUtils.getBaseName(javaSourceFileName));
-        goSourceFileName = "main.go";
-        goOutputFileName = FilenameUtils.getBaseName(goSourceFileName);
-        javaSourceFile = location.resolve(javaSourceFileName).toFile();
-        goSourceFile = location.resolve(goSourceFileName).toFile();
-    }
+    private static final Path location = Paths.get("testFiles");
+    private static String javaSourceFileName = "Sample.java";
+    private static String javaOutputFileName = String.format("%s.class", FilenameUtils.getBaseName(javaSourceFileName));
+    private static String goSourceFileName = "main.go";
+    private static String goOutputFileName = FilenameUtils.getBaseName(goSourceFileName);
+    private static File javaSourceFile = location.resolve(javaSourceFileName).toFile();
+    private static File goSourceFile = location.resolve(goSourceFileName).toFile();
 
     @Test
     public void shouldCompileJavaFileWithCommand() throws Exception {

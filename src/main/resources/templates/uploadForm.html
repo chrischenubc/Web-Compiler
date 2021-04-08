@@ -1,11 +1,24 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <body>
-
-	<div th:if="${message}">
-		<h2 th:text="${message}"/>
+	<h1>Welcome</h1>
+	<div>
+		<h3>You can compile your code by upload the file and select the language</h3>
+		<form method="POST" enctype="multipart/form-data" action="/compiler">
+			<table>
+				<tr><td>Choose language:</td><td><select th:name="language">
+					<option value="java">Java</option>
+					<option value="go">Go</option>
+				</select></td></tr>
+				<tr><td>Enter version:</td><td><input type="text" th:name="version" value="" /></td></tr>
+				<tr><td>Enter flags:</td><td><input type="text" name="flags" value="" /></td></tr>
+				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Compile!" /></td></tr>
+			</table>
+		</form>
 	</div>
 
 	<div>
+		<h3>You can customize the command to compile your code</h3>
 		<form method="POST" enctype="multipart/form-data" action="/command">
 			<table>
 				<tr><td>Choose language:</td><td><select th:name="language">
@@ -19,19 +32,8 @@
 		</form>
 	</div>
 
-	<div>
-		<form method="POST" enctype="multipart/form-data" action="/compiler">
-			<table>
-				<tr><td>Choose language:</td><td><select th:name="language">
-					<option value="java">Java</option>
-					<option value="go">Go</option>
-				</select></td></tr>
-				<tr><td>Enter version:</td><td><input type="text" th:name="version" value="" /></td></tr>
-				<tr><td>Enter flags:</td><td><input type="text" name="flags" value="" /></td></tr>
-				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-				<tr><td></td><td><input type="submit" value="Compile!" /></td></tr>
-			</table>
-		</form>
+	<div th:if="${message}">
+		<h2 th:text="${message}"/>
 	</div>
 
 	<div>
