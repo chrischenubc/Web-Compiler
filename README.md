@@ -4,7 +4,7 @@ Web Compiler is a web service written in Java, which allows user to send and com
 on the server side.
 
 ## Feature
-* Support Java(8-15) and Golang(1.08-1.13)
+* Support Java(7-14) and Golang(1.10-1.12)
 * Return .class for Java
 * Return an executable for Go
 * Provide ways to send flags and options to compier
@@ -56,6 +56,11 @@ curl --location --request POST 'http://localhost:8080/command?language=go' \
 The second one allows user to customize the compile command based on their needs.
 
 ## FAQ
+What language versions supported?
+    
+    * Java 7 to Java 14
+    * Golang 1.10 to 1.12
+    
 What are some limitations of the system?
 
    * Only support one source file to be compiled
@@ -72,4 +77,4 @@ What about the code you submit to the server?
     
 Where is the log?
     
-    `var/log/application.log`
+    var/log/application.log

@@ -1,4 +1,4 @@
-package com.miniproject.webcompiler;
+package com.miniproject.webcompiler.compile;
 
 import com.miniproject.webcompiler.compile.CompileFailureException;
 import com.miniproject.webcompiler.storage.StorageProperties;
