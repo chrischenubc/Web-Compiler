@@ -39,7 +39,7 @@ You can also refresh the page to see the files that are already stored on the se
 ## Usages & APIs
 There are two use cases for the system, so I define two REST APIs:
 
-#### First Use Case:
+### First Use Case:
 
 User uploads a source code file, choose language version(optional) 
 and enter options/flags (optional) for the compiler. 
@@ -63,7 +63,7 @@ the compiler will compile the Java code with Java 8 and compile the Go code with
 If **'flags'** is not set by the user,
 the compiler will compile the code without any options/flags.
 
-#### Second Use Case:
+### Second Use Case:
 
 User submits the file along with the user-defined compile command.
 
