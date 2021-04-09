@@ -3,7 +3,7 @@
 Web Compiler is a web service written in Java, which allows users to send and compile their code
 on the server side.
 
-## Feature
+## Features
 * Has a simple front-end page to send requests
 * Supports Java(7-14) and Golang(1.10-1.12)
 * Supports two use cases
@@ -13,7 +13,7 @@ on the server side.
 * Allows user-defined command
 * Includes Junit tests
 
-## How To Use
+## Install
 
 ```bash
 #build the project
@@ -36,17 +36,7 @@ Your brower will automatically start downloading the file.
 
 You can also refresh the page to see the files that are already stored on the server.
 
-## Implementations
-The command used to compile Java:
-
-`javac --release [version] [options] [source_file] `
-
-The command used to compile Go:
-
-`go tool compile -lang=go[version] [options] [source_file] && go tool link -o binary_file 
-object_file.o`
-
-## APIs
+## Usages & APIs
 There are two use cases for the system, so I define two REST APIs:
 
 #### First Use Case:
@@ -60,6 +50,12 @@ curl --location --request POST 'http://localhost:8080/compiler?language=java&ver
 --form 'flags=-verbose'
 ```
 @RequestParam: **'version'** and **'flags'** are optional.
+
+**supported version value for Java:** [7,8,9,10,11,12,13,14,15]
+
+**supported version value for Java:** [1.10, 1.11, 1.12, 1.13, 1.14]
+
+**'flags'** is a list of options separated by whitespace. For example: "-verbose -X"
  
 If **'version'** is not set by the user,
 the compiler will compile the Java code with Java 8 and compile the Go code with golang 1.12.
@@ -84,6 +80,16 @@ The user-defined compiler command for Java **must** be in this format:
 `javac --release version [options] [source_file] `
 
 The user-defined command for Go **must** be in this format:
+
+`go tool compile -lang=go[version] [options] [source_file] && go tool link -o binary_file 
+object_file.o`
+
+## Implementations
+The command used to compile Java:
+
+`javac --release [version] [options] [source_file] `
+
+The command used to compile Go:
 
 `go tool compile -lang=go[version] [options] [source_file] && go tool link -o binary_file 
 object_file.o`
