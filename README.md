@@ -92,7 +92,7 @@ object_file.o`
 What language versions supported?
     
     * Java 7 to Java 15
-    * Golang 1.10 to 1.12
+    * Golang 1.10 to 1.14
     
 What are some limitations of the system?
 
