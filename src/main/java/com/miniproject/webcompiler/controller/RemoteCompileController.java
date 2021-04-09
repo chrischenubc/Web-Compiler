@@ -1,6 +1,7 @@
 package com.miniproject.webcompiler.controller;
 
 import com.miniproject.webcompiler.compile.CompileService;
+import com.miniproject.webcompiler.compile.CompileServiceException;
 import com.miniproject.webcompiler.compile.CompileServiceFactory;
 
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -49,9 +49,12 @@ public class RemoteCompileController {
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + compiledFile.getFilename() + "\"")
                     .body(compiledFile);
-        } catch (RuntimeException e) {
+        } catch (CompileServiceException e) {
             logger.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

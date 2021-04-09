@@ -1,14 +1,17 @@
 # Web Compiler
 
-Web Compiler is a web service written in Java, which allows user to send and compile their code
+Web Compiler is a web service written in Java, which allows users to send and compile their code
 on the server side.
 
 ## Feature
-* Support Java(7-14) and Golang(1.10-1.12)
-* Return .class for Java
-* Return an executable for Go
-* Provide ways to send flags and options to compier
-* Allow users to customize their compile command
+* Has a simple front-end page to send requests
+* Supports Java(7-14) and Golang(1.10-1.12)
+* Supports two use cases
+* Returns .class for Java
+* Returns an executable for Go
+* Provides ways to send flags and options to compiler
+* Allows user-defined command
+* Includes Junit tests
 
 ## How To Use
 
@@ -27,14 +30,16 @@ After starting the application, visit [localhost:8080](localhost:8080)
 
 ![index.html](img/index.png)
 
-After uploading the code and enter the proper values, the server will compile your code.
+After uploading the code and enter the proper values, the server will compile the code and send it back to you.
+
+Your brower will automatically start downloading the file.
 
 You can also refresh the page to see the files that are already stored on the server.
 
 ## Implementations
 The command used to compile Java:
 
-`javac --release version [options] [source_file] `
+`javac --release [version] [options] [source_file] `
 
 The command used to compile Go:
 
@@ -42,13 +47,31 @@ The command used to compile Go:
 object_file.o`
 
 ## APIs
-There are two different REST APIs for the service:
+There are two use cases for the system, so I define two REST APIs:
+
+#### First Use Case:
+
+User uploads a source code file, choose language version(optional) 
+and enter options/flags (optional) for the compiler. 
 
 ```$xslt
 curl --location --request POST 'http://localhost:8080/compiler?language=java&version=9' \
 --form 'file=@/test_files/Sample.java' \
 --form 'flags=-verbose'
 ```
+@RequestParam: **'version'** and **'flags'** are optional.
+ 
+If **'version'** is not set by the user,
+the compiler will compile the Java code with Java 8 and compile the Go code with golang 1.12.
+
+If **'flags'** is not set by the user,
+the compiler will compile the code without any options/flags.
+
+#### Second Use Case:
+
+User submits the file along with the user-defined compile command.
+
+The second one allows user to define the compile command based on their needs.
 
 ```$xslt
 curl --location --request POST 'http://localhost:8080/command?language=go' \
@@ -56,7 +79,14 @@ curl --location --request POST 'http://localhost:8080/command?language=go' \
 --form 'command=go tool compile -lang=go1.11 main.go && go tool link -o main main.o'
 ```
 
-The second one allows user to customize the compile command based on their needs.
+The user-defined compiler command for Java **must** be in this format:
+
+`javac --release version [options] [source_file] `
+
+The user-defined command for Go **must** be in this format:
+
+`go tool compile -lang=go[version] [options] [source_file] && go tool link -o binary_file 
+object_file.o`
 
 ## FAQ
 What language versions supported?
@@ -89,3 +119,8 @@ How to run tests?
 How to check the jdk version used to compile a .class file?
 
 > [https://stackoverflow.com/questions/1096148/how-to-check-the-jdk-version-used-to-compile-a-class-file](https://stackoverflow.com/questions/1096148/how-to-check-the-jdk-version-used-to-compile-a-class-file)
+
+What is the maximum upload size for the file?
+
+    10MB. 
+    Any request with file exceeds the limit will result in an error
