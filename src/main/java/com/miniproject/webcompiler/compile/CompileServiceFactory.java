@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Generate proper CompileService for the given programming language
+ * Generate CompileService for the selected programming language
  */
 @Component
 public class CompileServiceFactory {

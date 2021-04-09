@@ -18,6 +18,9 @@ on the server side.
 
 # Start the application
 docker-compose up
+
+# View the log
+docker-compose logs
 ```
 
 After starting the application, visit [localhost:8080](localhost:8080)
@@ -75,10 +78,14 @@ What about the code you submit to the server?
 
     The code is stored in a temporary folder and will be removed once the server restarts.
     
-Where is the log?
+Where is the log file?
     
     var/log/application.log
     
 How to run tests?
     
     ./mvnw clean test
+    
+How to check the jdk version used to compile a .class file?
+
+> [https://stackoverflow.com/questions/1096148/how-to-check-the-jdk-version-used-to-compile-a-class-file](https://stackoverflow.com/questions/1096148/how-to-check-the-jdk-version-used-to-compile-a-class-file)
